@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y build-essential \
     cmake \
     wget \
     git \
+    yasm \
     pkg-config \
     libjpeg-dev \
     libtiff-dev \
@@ -15,9 +16,11 @@ RUN apt-get update && apt-get install -y build-essential \
     libavformat-dev \
     libswscale-dev \
     libv4l-dev \
-    libgtk2.0-dev \
     libatlas-base-dev \
     gfortran \
+    libtbb2 \
+    libtbb-dev \
+    libpq-dev \
     && apt-get -y clean all \
     && rm -rf /var/lib/apt/lists/*
 
