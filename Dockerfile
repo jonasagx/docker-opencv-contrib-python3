@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y build-essential \
     cmake \
     wget \
     git \
+    unzip \
     yasm \
     pkg-config \
     libjpeg-dev \
