@@ -71,5 +71,5 @@ RUN cd /opencv-3.1.0/cmake_binary \
 	&& rm /opencv.zip \
 	&& rm /opencv_contrib.zip 
 	&& rm -r /opencv-3.1.0 \
-	&& rm -r /opencv_contrib-3.1.0
+	&& rm -r /opencv_contrib-3.1.0 \
         && rm -r /leptonica-1.73.tar.gz
