@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y build-essential \
     libtbb2 \
     libtbb-dev \
     libpq-dev \
+    tesseract-ocr \
+    tesseract-ocr-dev \
     && apt-get -y clean all \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,13 +31,24 @@ RUN pip install numpy
 
 WORKDIR /
 
+# download opencv and opencv_contrib
 RUN wget https://github.com/Itseez/opencv/archive/3.1.0.zip -O opencv.zip \
 	&& unzip opencv.zip \
 	&& wget https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip -O opencv_contrib.zip \
 	&& unzip opencv_contrib \
-	&& mkdir /opencv-3.1.0/cmake_binary \
-	&& cd /opencv-3.1.0/cmake_binary \
-	&& cmake -DOPENCV_EXTRA_MODULES_PATH=/opencv_contrib-3.1.0/modules \
+	&& mkdir /opencv-3.1.0/cmake_binary
+# download and install leptonica for tesseract-ocr
+RUN wget http://www.leptonica.com/source/leptonica-1.73.tar.gz \
+        && tar xvf leptonica-1.73.tar.gz \
+        && cd leptonica-1.73 \
+        && ./configure \
+        && make \
+        && make install
+# make and install opencv
+RUN cd /opencv-3.1.0/cmake_binary \
+        && Tesseract_INCLUDE_DIR=/usr/include/tesseract \
+        && Tesseract_LIBRARY=/usr/lib \
+        && cmake -DOPENCV_EXTRA_MODULES_PATH=/opencv_contrib-3.1.0/modules \
 	  -DBUILD_TIFF=ON \
 	  -DBUILD_opencv_java=OFF \
 	  -DWITH_CUDA=OFF \
@@ -56,6 +69,7 @@ RUN wget https://github.com/Itseez/opencv/archive/3.1.0.zip -O opencv.zip \
 	  -DPYTHON_PACKAGES_PATH=$(python3.5 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
 	&& make install \
 	&& rm /opencv.zip \
-	&& rm /opencv_contrib.zip \
+	&& rm /opencv_contrib.zip 
 	&& rm -r /opencv-3.1.0 \
 	&& rm -r /opencv_contrib-3.1.0
+        && rm -r /leptonica-1.73.tar.gz
