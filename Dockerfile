@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y build-essential \
     libpq-dev \
     tesseract-ocr \
     tesseract-ocr-dev \
+    libgtk2.0-dev \
     && apt-get -y clean all \
     && rm -rf /var/lib/apt/lists/*
 
