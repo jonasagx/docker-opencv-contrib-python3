@@ -69,7 +69,7 @@ RUN cd /opencv-3.1.0/cmake_binary \
 	  -DPYTHON_PACKAGES_PATH=$(python3.5 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
 	&& make install \
 	&& rm /opencv.zip \
-	&& rm /opencv_contrib.zip 
+	&& rm /opencv_contrib.zip \
 	&& rm -r /opencv-3.1.0 \
 	&& rm -r /opencv_contrib-3.1.0 \
         && rm -r /leptonica-1.73.tar.gz
