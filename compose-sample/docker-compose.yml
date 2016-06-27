@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  opencv:
+    image: kaakaa/opencv-contrib-python3
+    volumes:
+    - ./sample:/usr/local/src
+    entrypoint: python /usr/local/src/sample.py
+    command: /usr/local/src/detect.png
