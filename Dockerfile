@@ -74,3 +74,6 @@ RUN cd /opencv-3.1.0/cmake_binary \
 	&& rm -r /opencv-3.1.0 \
 	&& rm -r /opencv_contrib-3.1.0 \
         && rm -r /leptonica-1.73.tar.gz
+
+# add jpn trained data
+RUN curl -o /usr/share/tesseract-ocr/tessdata/jpn.traineddata https://github.com/tesseract-ocr/tessdata/raw/master/jpn.traineddata
