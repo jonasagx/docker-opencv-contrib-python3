@@ -3,7 +3,8 @@ version: '2'
 services:
   opencv:
     image: kaakaa/opencv-contrib-python3
+    ports:
+    - "8080:8080"
     volumes:
     - ./sample:/usr/local/src
-    entrypoint: python /usr/local/src/sample.py
-    command: /usr/local/src/detect.png
+    entrypoint: /bin/sh -c 'cd /usr/local/src && pip install -r requirements.txt && python server.py'
