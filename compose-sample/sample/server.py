@@ -35,15 +35,16 @@ def captch_ex(file):
         file_name = tf.name
     original  = cv2.imread(file_name)
     img2gray = cv2.cvtColor(original,cv2.COLOR_BGR2GRAY)
-    ret, mask = cv2.threshold(img2gray, 130, 255, cv2.THRESH_BINARY)
+    img_blur = cv2.GaussianBlur(img2gray, (15,15), 0)
+    ret, mask = cv2.threshold(img_blur, 128, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     img_final = cv2.bitwise_and(img2gray , img2gray , mask =  mask)
-    ret, new_img = cv2.threshold(img_final, 80 , 255, cv2.THRESH_BINARY)  # for black text , cv.THRESH_BINARY_INV
+    ret, new_img = cv2.threshold(img_final, 128 , 255, cv2.THRESH_BINARY)  # for black text , cv.THRESH_BINARY_INV
     result = original.copy()
     '''
             line  8 to 12  : Remove noisy portion
     '''
     kernel = cv2.getStructuringElement(cv2.MORPH_CROSS,(3 , 3)) # to manipulate the orientation of dilution , large x means horizonatally dilating  more, large y means vertically dilating more
-    dilated = cv2.dilate(new_img,kernel,iterations = 9) # dilate , more the iteration more the dilation
+    dilated = cv2.dilate(new_img,kernel,iterations = 3) # dilate , more the iteration more the dilation
 
     i, contours, hierarchy = cv2.findContours(dilated,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE) # get contours
     index = 0
@@ -59,21 +60,23 @@ def captch_ex(file):
         # draw rectangle around contour on original image
         cv2.rectangle(result,(x,y),(x+w,y+h),(255,0,255),2)
         
-        list.append(tesseract(img_final, x, y, w, h))
+        list.append(tesseract(img2gray, x, y, w, h))
 
         #you can crop image and send to OCR  , false detected will return no text :)
-        cropped = img_final[y :y +  h , x : x + w]
-        s = file_name + '/crop_' + str(index) + '.jpg'
-        cv2.imwrite(s , cropped)
-        index = index + 1
+        #cropped = img_final[y :y +  h , x : x + w]
+        #s = file_name + '/crop_' + str(index) + '.jpg'
+        #cv2.imwrite(s , cropped)
+        #index = index + 1
     # write original image with added contours to disk
     #cv2.imshow('captcha_result' , img)
     #cv2.waitKey()
     cv2.imwrite('/usr/local/src/original.png', original)
     cv2.imwrite('/usr/local/src/result.png', result)
     cv2.imwrite('/usr/local/src/img2gray.png', img2gray)
+    cv2.imwrite('/usr/local/src/img_blur.png', img_blur)
     cv2.imwrite('/usr/local/src/mask.png', mask)
     cv2.imwrite('/usr/local/src/image_final.png', img_final)
+    cv2.imwrite('/usr/local/src/new_img.png', new_img)
     return original, result
 
 @route('/')
