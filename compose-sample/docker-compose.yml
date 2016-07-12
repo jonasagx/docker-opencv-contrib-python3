@@ -4,7 +4,10 @@ services:
   opencv:
     image: kaakaa/opencv-contrib-python3
     ports:
-    - "8080:8080"
+    - "8088:8080"
     volumes:
     - ./sample:/usr/local/src
+    # environment:
+    # - http_proxy=http://example.com:8080
+    # - https_proxy=http://example.com:8080
     entrypoint: /bin/sh -c 'cd /usr/local/src && pip install -r requirements.txt && python server.py'
