@@ -28,9 +28,12 @@ RUN apt-get update && apt-get install -y build-essential \
     && apt-get -y clean all \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip install --upgrade pip
 RUN pip install numpy
+RUN pip install scipy
 
-WORKDIR /
+RUN mkdir /project
+WORKDIR /project
 
 # download opencv and opencv_contrib
 RUN wget https://github.com/Itseez/opencv/archive/3.1.0.zip -O opencv.zip \
